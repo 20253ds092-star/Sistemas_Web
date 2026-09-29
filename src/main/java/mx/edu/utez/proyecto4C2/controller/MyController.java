@@ -1,7 +1,9 @@
 package mx.edu.utez.proyecto4C2.controller;
 
 import jakarta.validation.Valid;
+import mx.edu.utez.proyecto4C2.Service.MyService;
 import mx.edu.utez.proyecto4C2.controller.Dto.RequestBodyDTO;
+import mx.edu.utez.proyecto4C2.controller.Dto.RequestCalculadoraDTO;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,8 +12,14 @@ import org.springframework.http.ResponseEntity;
 @CrossOrigin({"*"})
 @RequestMapping("/my-services")
 public class MyController {
+    private final MyService service;
 
     private final String NOMBRE_ALUMNO = "Avila Baeza Luis Javoer";
+
+    public MyController(MyService service) {
+        this.service = service;
+    }
+
     @GetMapping
     public String miPrimerServicio() {
         return "hello world";
@@ -39,7 +47,6 @@ public class MyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(payload);
     }
 
-
     @GetMapping("/fizzbuzz/{n}")
     public String fizzBuzz(@PathVariable int n) {
         for (int i = 1; i <= n; i++) {
@@ -56,7 +63,6 @@ public class MyController {
         return NOMBRE_ALUMNO;
     }
 
-
     @GetMapping("/fibonacci/{n}")
     public String fibonacci(@PathVariable int n) {
         long a = 0, b = 1;
@@ -67,5 +73,10 @@ public class MyController {
             b = siguiente;
         }
         return NOMBRE_ALUMNO;
+    }
+
+    @PostMapping("/calculadora")
+    public double calculadora(@RequestBody @Valid RequestCalculadoraDTO payload) {
+        return service.calculadora(payload);
     }
 }
